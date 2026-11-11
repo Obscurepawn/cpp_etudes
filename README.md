@@ -35,12 +35,18 @@ cat repeat.csv |./csvtable.pl
 
 ### cpptree.pl: show class hierarchy of cpp project in the style of Linux utility tree.
 
+This script requires Perl and [The Silver Searcher (`ag`)](https://github.com/ggreer/the_silver_searcher). Run it from the source tree you want to inspect. First, from the `cpp_etudes` repository root, save the script directory so it remains accessible after `cd`:
+
+```sh
+cpp_etudes_dir=$(pwd)
+```
+
 1. usage, try with incubator-doris, other cpp projects are just ok.
 
 ```
 # format
 
-./cpptree.pl <keyword|regex> <filter> <verbose(0|1)> <depth(num)>
+"$cpp_etudes_dir/cpptree.pl" <keyword|regex> <filter> <verbose(0|1)> <depth(num)>
 - keyword for exact match, regex for fuzzy match;
 - subtrees whose leaf nodes does not match filter are pruned, default value is '' means match all;
 - verbose=0, no file locations output; otherwise succinctly output;
@@ -50,55 +56,55 @@ git clone https://github.com/satanson/incubator-doris.git
 cd incubator-doris
 
 # show all classes
-./cpptree.pl '\w+'
+"$cpp_etudes_dir/cpptree.pl" '\w+'
 
 # show all classes with file locations.
-./cpptree.pl '\w+' '' 1
+"$cpp_etudes_dir/cpptree.pl" '\w+' '' 1
 
 # show all classes exact-match ExecNode if ExecNode class exists
-./cpptree.pl 'ExecNode' '' 1
+"$cpp_etudes_dir/cpptree.pl" 'ExecNode' '' 1
 
 # show all classes fuzzy-match regex '.*Node$' if the literal class name not exists.
-./cpptree.pl '.*Node$' '' 1
+"$cpp_etudes_dir/cpptree.pl" '.*Node$' '' 1
 
 # show all classes and depth of derivation relationship is less than 3
-./cpptree.pl '\w+' '' 1 3
+"$cpp_etudes_dir/cpptree.pl" '\w+' '' 1 3
 
 # show all classes whose ancestor class matches 'Node' and itself or its offsprings matches 'Scan'
-/cpptree.pl 'Node' 'Scan'
+"$cpp_etudes_dir/cpptree.pl" 'Node' 'Scan'
 
 ```
 2. some outputs
 
 ```
 cd incubator-doris
-./cpptree.pl 'ExecNode'
+"$cpp_etudes_dir/cpptree.pl" 'ExecNode'
 ```
 ![image](./images/doris_execnode.png)
 
 
 ```
 cd ClickHouse
-./cpptree.pl IProcessor
+"$cpp_etudes_dir/cpptree.pl" IProcessor
 ```
 ![image](./images/clickhouse_iprocessor.png)
 
 
 ```
 cd ClickHouse
-./cpptree.pl IDataType '' 1
+"$cpp_etudes_dir/cpptree.pl" IDataType '' 1
 ```
 ![image](./images/clickhouse_idatatype.png)
 
 ```
 cd incubator-doris
-./cpptree.pl 'Node' 'Scan'
+"$cpp_etudes_dir/cpptree.pl" 'Node' 'Scan'
 ```
 ![image](./images/doris_node_to_scan.png)
 
 ```
 cd ClickHouse
-./cpptree.pl IProcessor Aggregat 1
+"$cpp_etudes_dir/cpptree.pl" IProcessor Aggregat 1
 ```
 ![image](./images/clickhouse_iprocessor_to_aggregat.png)
 
